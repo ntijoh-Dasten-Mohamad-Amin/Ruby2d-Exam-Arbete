@@ -148,7 +148,7 @@ on :key_down do |event|
 
         @level_count = Text.new(
           "Level #{current_level}",
-          x: 550, y: 100,
+          x: 900, y: 40,
           size: 35,
           color: 'white',
           z: 1
@@ -181,7 +181,7 @@ on :key_down do |event|
 
         @level_count = Text.new(
           "Level #{current_level}",
-          x: 550, y: 100,
+          x: 900, y: 40,
           size: 35,
           color: 'white',
           z: 1
