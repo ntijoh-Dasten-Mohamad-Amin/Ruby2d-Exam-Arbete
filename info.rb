@@ -13,27 +13,35 @@ class InfoScreen
       x: 0, y: 0, z: 4,
       width: Window.width,
       height: Window.height,
-      color: 'brown'
+      color: 'green'
     )
     @elements << bg
 
     # Title text
     title = Text.new(
       'Info Screen',
-      x: 50, y: 50, z: 4,
-      size: 30,
+      x: 450, y: 250, z: 4,
+      size: 48,
       color: 'black'
     )
     @elements << title
 
     # Instructions
-    instructions = Text.new(
-      'PLACEHOLDER INFO TEXT BLAST',
-      x: 50, y: 100, z: 4,
-      size: 20,
+    instructions_1 = Text.new(
+      'Use WASD or Arrow keys to move.',
+      x: 350, y: 375, z: 4,
+      size: 28,
       color: 'black'
     )
-    @elements << instructions
+    @elements << instructions_1
+
+      instructions_2 = Text.new(
+      'Avoid the red walls and reach Biggie Cheese!',
+      x: 300, y: 450, z: 4,
+      size: 28,
+      color: 'black'
+    )
+    @elements << instructions_2
   end
 
   def hide

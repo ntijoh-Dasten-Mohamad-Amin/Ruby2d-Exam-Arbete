@@ -1,7 +1,7 @@
 require 'ruby2d'
 require_relative '../wall'
 
-class Level1
+class Level4
   attr_reader :walls, :finish, :start_x, :start_y
 
   def initialize
@@ -9,12 +9,6 @@ class Level1
     @start_y = 380
 
     @walls = [
-      Wall.new(x: 200, y: 280, width: 100, height: 300),
-      Wall.new(x: 415, y: 0, width: 100, height: 300),
-      Wall.new(x: 415, y: 550, width: 100, height: 300),
-      Wall.new(x: 640, y: 250, width: 100, height: 400),
-
-
     ]
 
     @finish = Image.new(

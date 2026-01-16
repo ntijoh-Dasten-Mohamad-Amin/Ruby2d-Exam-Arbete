@@ -24,7 +24,7 @@ class TitleScreen
       "Press ENTER to start",
       x: 430,
       y: 380,
-      size: 30,
+      size: 35,
       color: 'white',
       z: 10
     )
@@ -32,8 +32,8 @@ class TitleScreen
     @elements << Text.new(
       "Press I for info",
       x: 480,
-      y: 430,
-      size: 24,
+      y: 440,
+      size: 28,
       color: 'white',
       z: 10
     )
@@ -41,8 +41,8 @@ class TitleScreen
     @elements << Text.new(
       "Press Q to quit",
       x: 480,
-      y: 470,
-      size: 24,
+      y: 485,
+      size: 28,
       color: 'white',
       z: 10
     )
