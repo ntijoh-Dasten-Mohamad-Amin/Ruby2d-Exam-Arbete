@@ -9,10 +9,10 @@ class Level1
     @start_y = 380
 
     @walls = [
-      Wall.new(x: 200, y: 280, width: 100, height: 300),
+      Wall.new(x: 190, y: 280, width: 100, height: 300),
       Wall.new(x: 415, y: 0, width: 100, height: 300),
       Wall.new(x: 415, y: 550, width: 100, height: 300),
-      Wall.new(x: 640, y: 250, width: 100, height: 400),
+      Wall.new(x: 640, y: 230, width: 100, height: 410),
 
 
     ]
@@ -20,7 +20,7 @@ class Level1
     @finish = Image.new(
       'img/biggie.jpeg',
       x: 1115,
-      y: 425,
+      y: 380,
       width: 85,
       height: 85
     )

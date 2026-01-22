@@ -25,6 +25,7 @@ current_level = 1
 @info_screen.hide
 
 player = Player.new(x: 0, y: 0, size: 84)
+player.remove
 
 @timer_start = Time.now
 @timer_text = Text.new("Time: 0", x: 535, y: 20, size: 30, color: 'white', z: 10)
@@ -212,6 +213,35 @@ update do
       break
     end
   end
+
+  finish = active_level.finish
+
+if finish &&
+   player.shape.x < finish.x + finish.width &&
+   player.shape.x + player.size > finish.x &&
+   player.shape.y < finish.y + finish.height &&
+   player.shape.y + player.size > finish.y
+
+  # Go to next level
+  active_level.remove
+  current_level += 1
+
+  if levels[current_level]
+    active_level = load_level(levels, current_level, player)
+
+    @level_count&.remove
+    @level_count = Text.new(
+      "Level #{current_level}",
+      x: 50, y: 20,
+      size: 35,
+      color: 'white'
+    )
+  else
+    puts "🎉 You beat the game!"
+    close
+  end
+end
+
 
   # Window bounds
   player.shape.x = player.shape.x.clamp(0, Window.width - player.size)

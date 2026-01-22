@@ -22,7 +22,7 @@ class TitleScreen
 
     @elements << Text.new(
       "Press ENTER to start",
-      x: 430,
+      x: 400,
       y: 380,
       size: 35,
       color: 'white',

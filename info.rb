@@ -42,6 +42,15 @@ class InfoScreen
       color: 'black'
     )
     @elements << instructions_2
+
+      instructions_3 = Text.new(
+      'Press N to go to the next level & Press B to go back a level.',
+      x: 225, y: 525, z: 4,
+      size: 28,
+      color: 'black'
+    )
+    @elements << instructions_3
+    
   end
 
   def hide

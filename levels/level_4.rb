@@ -14,7 +14,7 @@ class Level4
     @finish = Image.new(
       'img/biggie.jpeg',
       x: 1115,
-      y: 425,
+      y: 380,
       width: 85,
       height: 85
     )
