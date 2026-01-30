@@ -20,7 +20,7 @@ class InfoScreen
     # Title text
     title = Text.new(
       'Info Screen',
-      x: 450, y: 250, z: 4,
+      x: 450, y: 225, z: 4,
       size: 48,
       color: 'black'
     )
@@ -29,15 +29,15 @@ class InfoScreen
     # Instructions
     instructions_1 = Text.new(
       'Use WASD or Arrow keys to move.',
-      x: 350, y: 375, z: 4,
+      x: 375, y: 350, z: 4,
       size: 28,
       color: 'black'
     )
     @elements << instructions_1
 
       instructions_2 = Text.new(
-      'Avoid the red walls and reach Biggie Cheese!',
-      x: 300, y: 450, z: 4,
+      'Avoid the red walls and reach Biggie Cheese to progress!',
+      x: 250, y: 425, z: 4,
       size: 28,
       color: 'black'
     )
@@ -45,7 +45,7 @@ class InfoScreen
 
       instructions_3 = Text.new(
       'Press N to go to the next level & Press B to go back a level.',
-      x: 225, y: 525, z: 4,
+      x: 240, y: 500, z: 4,
       size: 28,
       color: 'black'
     )

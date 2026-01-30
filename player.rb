@@ -11,7 +11,7 @@ class Player
       height: size,
       color: 'yellow'
     )
-    @shape.remove   # 👈 IMPORTANT
+    @shape.remove
     @y_speed = 0
   end
 

@@ -65,7 +65,8 @@ end
 active_level = load_level(levels, current_level, player)
 active_level.remove # hide until game starts
 
-death_audio = Sound.new('audio/coin.mp3')
+death_audio = Sound.new('audio/bruh.mp3')
+win_audio = Sound.new('audio/coin.mp3')
 
 on :key_down do |event|
   case @state
@@ -108,6 +109,14 @@ on :key_down do |event|
       @timer_text.add
       @death_text.add
       @timer_start = Time.now
+      @level_count&.remove
+      @level_count = Text.new(
+        "Level #{current_level}",
+        x: 50, y: 20, z: 10,
+        size: 35,
+        color: 'white'
+      )
+
 
     when 'escape'
       @info_screen.hide
@@ -137,6 +146,18 @@ on :key_down do |event|
 
     when 'q'
       close
+
+    when 'i'
+      @state = :info
+      @title_screen.hide
+      @info_screen.show
+      player.remove
+      active_level.remove
+      @timer_text.remove
+      @death_text.remove
+      @keys_held.clear
+
+      @level_count&.remove
 
     when 'n' # next level
       active_level.remove
@@ -196,7 +217,7 @@ update do
 
   player.x_speed = -10 if @keys_held['a'] || @keys_held['left']
   player.x_speed = 10  if @keys_held['d'] || @keys_held['right']
-  player.y_speed = -10 if @keys_held['w'] || @keys_held['up']
+  player.y_speed = -10 if @keys_held['w'] || @keys_held['uwdp']
   player.y_speed = 10  if @keys_held['s'] || @keys_held['down']
 
   player.move
@@ -217,10 +238,12 @@ update do
   finish = active_level.finish
 
 if finish &&
-   player.shape.x < finish.x + finish.width &&
-   player.shape.x + player.size > finish.x &&
-   player.shape.y < finish.y + finish.height &&
-   player.shape.y + player.size > finish.y
+  player.shape.x < finish.x + finish.width &&
+  player.shape.x + player.size > finish.x &&
+  player.shape.y < finish.y + finish.height &&
+  player.shape.y + player.size > finish.y
+  win_audio.play
+
 
   # Go to next level
   active_level.remove
