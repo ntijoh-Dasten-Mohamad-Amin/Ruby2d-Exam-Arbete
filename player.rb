@@ -12,7 +12,6 @@ class Player
       color: 'yellow'
     )
     @shape.remove
-    @y_speed = 0
   end
 
   def add

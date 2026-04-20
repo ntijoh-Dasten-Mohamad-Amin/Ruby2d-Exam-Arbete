@@ -47,13 +47,6 @@ class TitleScreen
       z: 10
     )
 
-    # @elements << Rectangle.new(
-    #   x: 0, y: 0,
-    #   width: Window.width,
-    #   height: Window.height,
-    #   color: 'orange',
-    #   z: 5
-    # )
   end
 
   def show

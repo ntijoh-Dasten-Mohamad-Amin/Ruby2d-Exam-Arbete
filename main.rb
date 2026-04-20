@@ -3,6 +3,7 @@ require_relative 'title_screen'
 require_relative 'wall'
 require_relative 'player'
 require_relative 'info'
+require_relative 'moving_object'
 require_relative 'levels/level_1'
 require_relative 'levels/level_2'
 require_relative 'levels/level_3'
@@ -217,7 +218,7 @@ update do
 
   player.x_speed = -10 if @keys_held['a'] || @keys_held['left']
   player.x_speed = 10  if @keys_held['d'] || @keys_held['right']
-  player.y_speed = -10 if @keys_held['w'] || @keys_held['uwdp']
+  player.y_speed = -10 if @keys_held['w'] || @keys_held['up']
   player.y_speed = 10  if @keys_held['s'] || @keys_held['down']
 
   player.move
@@ -260,7 +261,6 @@ if finish &&
       color: 'white'
     )
   else
-    puts "🎉 You beat the game!"
     close
   end
 end

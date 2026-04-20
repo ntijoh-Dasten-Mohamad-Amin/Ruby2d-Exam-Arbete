@@ -17,8 +17,6 @@ class Level2
       Wall.new(x: 600, y: 800, width: 100, height: 50),
       Wall.new(x: 850, y: 0, width: 100, height: 350),
       Wall.new(x: 850, y: 500, width: 100, height: 400),
-
-
     ]
 
     @finish = Image.new(

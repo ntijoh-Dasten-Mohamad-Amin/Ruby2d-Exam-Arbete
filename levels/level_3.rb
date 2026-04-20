@@ -20,9 +20,6 @@ class Level3
       Wall.new(x: 0, y: 0, width: 10, height: 250),
       Wall.new(x: 0, y: 0, width: 900, height: 25),
       Wall.new(x: 1000, y: 125, width: 200, height: 50),
-
-
-
     ]
 
     @finish = Image.new(

@@ -13,7 +13,7 @@ class InfoScreen
       x: 0, y: 0, z: 4,
       width: Window.width,
       height: Window.height,
-      color: 'green'
+      color: 'yellow'
     )
     @elements << bg
 
