@@ -19,18 +19,12 @@ set diagnostics: true
 @keys_held = {}
 current_level = 1
 
-# -------------------------
-# Players (LOCAL MULTIPLAYER)
-# -------------------------
 players = []
 players << Player.new(x: 50, y: 380, size: 84, color: 'yellow')
 players << Player.new(x: 150, y: 380, size: 84, color: 'blue')
 
 players.each(&:remove)
 
-# -------------------------
-# UI
-# -------------------------
 @title_screen = TitleScreen.new
 @title_screen.show
 
@@ -47,9 +41,6 @@ players.each(&:remove)
 
 @last_mouse_log = Time.now
 
-# -------------------------
-# Levels
-# -------------------------
 levels = {
   1 => Level1,
   2 => Level2,
@@ -61,7 +52,6 @@ def load_level(levels, number, players)
   level = levels[number].new
   level.add
 
-  # Reset ALL players
   players.each_with_index do |player, i|
     player.shape.x = 50 + (i * 100)
     player.shape.y = 380
@@ -76,9 +66,6 @@ active_level.remove
 death_audio = Sound.new('audio/bruh.mp3')
 win_audio = Sound.new('audio/coin.mp3')
 
-# -------------------------
-# Input
-# -------------------------
 on :key_down do |event|
   case @state
   when :title
@@ -169,18 +156,12 @@ on :key_up do |event|
   @keys_held.delete(event.key)
 end
 
-# -------------------------
-# Game Loop
-# -------------------------
 update do
   next unless @state == :game
 
   elapsed = Time.now - @timer_start
   @timer_text.text = "Time: #{elapsed.round(2)}"
 
-  # -------------------------
-  # Player 1 (WASD)
-  # -------------------------
   p1 = players[0]
   p1.x_speed = 0
   p1.y_speed = 0
@@ -189,9 +170,6 @@ update do
   p1.y_speed = -10 if @keys_held['w']
   p1.y_speed = 10  if @keys_held['s']
 
-  # -------------------------
-  # Player 2 (Arrow Keys)
-  # -------------------------
   p2 = players[1]
   p2.x_speed = 0
   p2.y_speed = 0
@@ -202,9 +180,6 @@ update do
 
   players.each(&:move)
 
-  # -------------------------
-  # Collision
-  # -------------------------
   players.each do |player|
     active_level.walls.each do |wall|
       if wall.colliding?(player.shape, player.size)
@@ -218,33 +193,31 @@ update do
     end
   end
 
-  # -------------------------
-  # Finish check
-  # -------------------------
   finish = active_level.finish
 
-  players.each do |player|
-    if finish &&
+  all_players_in_finish = players.all? do |player|
+    finish &&
       player.shape.x < finish.x + finish.width &&
       player.shape.x + player.size > finish.x &&
       player.shape.y < finish.y + finish.height &&
       player.shape.y + player.size > finish.y
+  end
 
-      win_audio.play
-      active_level.remove
-      current_level += 1
+  if all_players_in_finish
+    win_audio.play
 
-      if levels[current_level]
-        active_level = load_level(levels, current_level, players)
-      else
-        close
-      end
+    active_level.remove
+    current_level += 1
+
+    if levels[current_level]
+      active_level = load_level(levels, current_level, players)
+
+      @level_count.text = "Level #{current_level}"
+    else
+      close
     end
   end
 
-  # -------------------------
-  # Window bounds
-  # -------------------------
   players.each do |player|
     player.shape.x = player.shape.x.clamp(0, Window.width - player.size)
     player.shape.y = player.shape.y.clamp(0, Window.height - player.size)
