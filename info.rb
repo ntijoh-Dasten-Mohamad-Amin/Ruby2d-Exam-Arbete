@@ -50,6 +50,14 @@ class InfoScreen
       color: 'black'
     )
     @elements << instructions_3
+
+      instructions_4 = Text.new(
+      'Press ESC to return back to the main menu',
+      x: 320, y: 575, z: 4,
+      size: 28,
+      color: 'black'
+    )
+    @elements << instructions_4
     
   end
 
