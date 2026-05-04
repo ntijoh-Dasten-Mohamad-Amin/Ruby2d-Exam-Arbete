@@ -2,7 +2,7 @@ class Player
   attr_reader :shape
   attr_accessor :x_speed, :y_speed
 
-  def initialize(x:, y:, size:, color: 'yellow')    
+  def initialize(x:, y:, size:, color:)    
     @size = size
     @shape = Rectangle.new(
       x: x,
