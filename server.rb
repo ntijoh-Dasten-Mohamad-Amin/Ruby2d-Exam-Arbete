@@ -7,12 +7,13 @@ clients = []
 game_state = { players: {}, level: 1, deaths: 0, timer: 0.0 }
 mutex = Mutex.new
 
-server = TCPServer.new(PORT)
+server = TCPServer.new('0.0.0.0', PORT)
 puts "Waiting for 2 players on port #{PORT}..."
 i = 0
 # 2.times do |i|
 while true do
   client = server.accept
+  client.puts({ assigned_id: i }.to_json)
   mutex.synchronize { clients << client }
   puts "Player #{i + 1} connected!"
 
