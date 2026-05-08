@@ -13,10 +13,6 @@ require_relative 'levels/level_3'
 require_relative 'levels/level_4'
 require_relative 'levels/finish'
 
-# ── Network setup ──────────────────────────────────────────────────────────────
-# Usage: ruby main.rb <server_ip> <player_id>
-#   Player 0 = yellow, WASD controls
-#   Player 1 = blue,   arrow key controls
 # Examples:
 #   ruby main.rb 127.0.0.1 0   (host machine, player 1)
 #   ruby main.rb 192.168.1.42 1 (LAN machine, player 2)
@@ -34,8 +30,10 @@ set diagnostics: true
 current_level = 1
 
 players = []
-players << Player.new(x: 50,  y: 380, size: 84, color: 'yellow')
-players << Player.new(x: 150, y: 380, size: 84, color: 'blue')
+players << Player.new(x: 50, y: 380, size: 84, color: 'yellow')
+players << Player.new(x: 50, y: 380, size: 84, color: 'blue')
+p players
+
 players.each(&:remove)
 
 @title_screen = TitleScreen.new
@@ -63,7 +61,7 @@ def load_level(levels, number, players)
   level = levels[number].new
   level.add
   players.each_with_index do |player, i|
-    player.shape.x = 50 + (i * 100)
+    player.shape.x = 50
     player.shape.y = 380
   end
   level
@@ -73,7 +71,7 @@ active_level = load_level(levels, current_level, players)
 active_level.remove
 
 death_audio = Sound.new('audio/bruh.mp3')
-win_audio   = Sound.new('audio/coin.mp3')
+win_audio = Sound.new('audio/coin.mp3')
 
 on :key_down do |event|
   case @state
@@ -162,28 +160,28 @@ update do
 
   s = net.state
 
-  local = players[PLAYER_ID]
-  local.x_speed = 0
-  local.y_speed = 0
+  p1 = players[0]
+  p1.x_speed = 0
+  p1.y_speed = 0
+  p1.x_speed = -10 if @keys_held['a']
+  p1.x_speed =  10 if @keys_held['d']
+  p1.y_speed = -10 if @keys_held['w']
+  p1.y_speed =  10 if @keys_held['s']
 
-  if PLAYER_ID == 0
-    local.x_speed = -10 if @keys_held['a']
-    local.x_speed =  10 if @keys_held['d']
-    local.y_speed = -10 if @keys_held['w']
-    local.y_speed =  10 if @keys_held['s']
-  else
-    local.x_speed = -10 if @keys_held['left']
-    local.x_speed =  10 if @keys_held['right']
-    local.y_speed = -10 if @keys_held['up']
-    local.y_speed =  10 if @keys_held['down']
-  end
+  p2 = players[1]
+  p2.x_speed = 0
+  p2.y_speed = 0
+  p2.x_speed = -10 if @keys_held['left']
+  p2.x_speed =  10 if @keys_held['right']
+  p2.y_speed = -10 if @keys_held['up']
+  p2.y_speed =  10 if @keys_held['down']
 
-  local.move
-  # net.send_level(10)
-  net.send_input(local.shape.x, local.shape.y)
+  p1.move
+  p2.move
+
+  net.send_input(p1.shape.x, p1.shape.y, p2.shape.x, p2.shape.y)
 
   s["players"].each do |id, data|
-    next if id.to_i == PLAYER_ID
     players[id.to_i].shape.x = data["x"]
     players[id.to_i].shape.y = data["y"]
   end
