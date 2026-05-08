@@ -59,7 +59,7 @@ def load_level(levels, number, players)
   level = levels[number].new
   level.add
   players.each_with_index do |player, i|
-    player.shape.x = 50
+    player.shape.x = 50 + (i * 100)
     player.shape.y = 380
   end
   level
