@@ -13,16 +13,12 @@ require_relative 'levels/level_3'
 require_relative 'levels/level_4'
 require_relative 'levels/finish'
 
-# ── Network setup ──────────────────────────────────────────────────────────────
-# Usage: ruby main.rb <server_ip> <player_id>
-#   Player 0 = yellow, WASD controls
-#   Player 1 = blue,   arrow key controls
-# Examples:
-#   ruby main.rb 127.0.0.1 0   (host machine, player 1)
-#   ruby main.rb 192.168.1.42 1 (LAN machine, player 2)
-HOST      = ARGV[0] || "127.0.0.1"
-PLAYER_ID = (ARGV[1] || "0").to_i
-net = Network.new(HOST, 2345, PLAYER_ID)
+# Both machines run the same command:
+#   ruby main.rb 127.0.0.1       (host machine)
+#   ruby main.rb 192.168.1.42    (LAN machine)
+# The server assigns each client their player ID automatically.
+HOST = ARGV[0] || "127.0.0.1"
+net  = Network.new(HOST, 2345)   # ID is assigned by server
 
 set title: "*Insert funny title here*"
 set width: 1200, height: 850
@@ -34,8 +30,8 @@ set diagnostics: true
 current_level = 1
 
 players = []
-players << Player.new(x: 50,  y: 380, size: 84, color: 'yellow')
-players << Player.new(x: 150, y: 380, size: 84, color: 'blue')
+players << Player.new(x: 50, y: 380, size: 84, color: 'yellow')
+players << Player.new(x: 50, y: 380, size: 84, color: 'blue')
 players.each(&:remove)
 
 @title_screen = TitleScreen.new
@@ -156,17 +152,19 @@ end
 
 update do
   next unless @state == :game
+  next unless net.player_id
 
   elapsed = Time.now - @timer_start
   @timer_text.text = "Time: #{elapsed.round(2)}"
 
-  s = net.state
+  s         = net.state
+  player_id = net.player_id
 
-  local = players[PLAYER_ID]
+  local = players[player_id]
   local.x_speed = 0
   local.y_speed = 0
 
-  if PLAYER_ID == 0
+  if player_id == 0
     local.x_speed = -10 if @keys_held['a']
     local.x_speed =  10 if @keys_held['d']
     local.y_speed = -10 if @keys_held['w']
@@ -179,25 +177,24 @@ update do
   end
 
   local.move
-  # net.send_level(10)
   net.send_input(local.shape.x, local.shape.y)
 
   s["players"].each do |id, data|
-    next if id.to_i == PLAYER_ID
+    next if id.to_i == player_id
+    next unless data && data["x"] && data["y"]
     players[id.to_i].shape.x = data["x"]
     players[id.to_i].shape.y = data["y"]
   end
 
-  players.each do |player|
-    active_level.walls.each do |wall|
-      if wall.colliding?(player.shape, player.size)
-        player.shape.x = 50
-        player.shape.y = 380
-        death_audio.play
-        @death_counter += 1
-        @death_text.text = "Deaths: #{@death_counter}"
-        break
-      end
+  local = players[player_id]
+  active_level.walls.each do |wall|
+    if wall.colliding?(local.shape, local.size)
+      local.shape.x = 50 + (player_id * 100)
+      local.shape.y = 380
+      death_audio.play
+      @death_counter += 1
+      @death_text.text = "Deaths: #{@death_counter}"
+      break
     end
   end
 
@@ -223,10 +220,9 @@ update do
     end
   end
 
-  players.each do |player|
-    player.shape.x = player.shape.x.clamp(0, Window.width  - player.size)
-    player.shape.y = player.shape.y.clamp(0, Window.height - player.size)
-  end
+  local = players[player_id]
+  local.shape.x = local.shape.x.clamp(0, Window.width  - local.size)
+  local.shape.y = local.shape.y.clamp(0, Window.height - local.size)
 end
 
 show
