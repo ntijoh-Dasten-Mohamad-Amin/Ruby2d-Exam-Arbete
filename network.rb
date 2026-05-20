@@ -29,6 +29,10 @@ class Network
   rescue
   end
 
+  def send_level(number)
+    @socket.puts({ id: @player_id, level: number }.to_json)
+  end
+
   def state
     @mutex.synchronize { @state.dup }
   end
