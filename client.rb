@@ -13,7 +13,6 @@ require_relative 'levels/level_3'
 require_relative 'levels/level_4'
 require_relative 'levels/finish'
 
-# Usage:
 #   ruby client.rb 127.0.0.1       (host machine)
 #   ruby client.rb 192.168.1.42    (LAN machine)
 HOST = ARGV[0] || "127.0.0.1"
@@ -156,7 +155,7 @@ end
 
 update do
   next unless @state == :game
-  next unless net.player_id  # wait until server has assigned us an ID
+  next unless net.player_id
 
   elapsed = Time.now - @timer_start
   @timer_text.text = "Time: #{elapsed.round(2)}"
@@ -164,7 +163,6 @@ update do
   s         = net.state
   player_id = net.player_id
 
-  # Move only the local player from keyboard input
   local = players[player_id]
   local.x_speed = 0
   local.y_speed = 0
@@ -184,7 +182,6 @@ update do
   local.move
   net.send_input(local.shape.x, local.shape.y)
 
-  # Apply remote player positions — never overwrite our own
   s["players"].each do |id, data|
     next if id.to_i == player_id
     next unless data && data["x"] && data["y"]
@@ -192,7 +189,6 @@ update do
     players[id.to_i].shape.y = data["y"]
   end
 
-  # Collision — local player only, each machine handles its own
   active_level.walls.each do |wall|
     if wall.colliding?(local.shape, local.size)
       local.shape.x = 50
@@ -204,7 +200,6 @@ update do
     end
   end
 
-  # Finish — check both players' positions
   finish = active_level.finish
   all_players_in_finish = players.all? do |player|
     finish &&
@@ -227,7 +222,6 @@ update do
     end
   end
 
-  # Clamp local player only
   local.shape.x = local.shape.x.clamp(0, Window.width  - local.size)
   local.shape.y = local.shape.y.clamp(0, Window.height - local.size)
 end
